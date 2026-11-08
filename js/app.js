@@ -707,10 +707,6 @@ function bindMapControls() {
         if (
           current === "light"
         ) {
-          next = "dark";
-        } else if (
-          current === "dark"
-        ) {
           next =
             "satellite";
         } else {
@@ -724,8 +720,6 @@ function bindMapControls() {
         const messages = {
           light:
             "تم تفعيل الخريطة الفاتحة.",
-          dark:
-            "تم تفعيل الخريطة الداكنة.",
           satellite:
             "تم تفعيل الخريطة الفضائية."
         };
