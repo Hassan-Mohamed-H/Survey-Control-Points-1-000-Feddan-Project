@@ -444,44 +444,73 @@ function startAutoRefresh() {
 // Search
 // ===============================
 
-function getSearchResults(
-  query
-) {
-  const value =
-    String(query || "")
-      .trim()
-      .toLowerCase();
+function getSearchResults(query) {
+  const value = String(query || "")
+    .trim()
+    .toLowerCase();
 
   if (!value) {
     return [];
   }
 
   return currentMapData
-    .filter((item) => {
-      const searchable = [
-        item.name,
-        item.code,
-        item.description,
-        item.type,
-        item.status,
-        item.crs,
-        item.northing,
-        item.easting,
-        item.elevation
-      ]
-        .filter(
-          (value) =>
-            value !== null &&
-            value !== undefined
-        )
-        .join(" ")
-        .toLowerCase();
+    .map((item, index) => {
+      const name = String(item.name ?? "").toLowerCase();
+      const code = String(item.code ?? "").toLowerCase();
 
-      return searchable.includes(
-        value
-      );
+      let priority = 6;
+
+      if (name === value) {
+        priority = 0;
+      }
+
+      else if (code === value) {
+        priority = 1;
+      }
+
+      else if (name.startsWith(value)) {
+        priority = 2;
+      }
+
+      else if (code.startsWith(value)) {
+        priority = 3;
+      }
+
+      else if (name.includes(value)) {
+        priority = 4;
+      }
+
+      else if (code.includes(value)) {
+        priority = 5;
+      }
+      
+      else {
+        const searchable = [
+          item.description,
+          item.type,
+          item.status,
+          item.crs,
+          item.northing,
+          item.easting,
+          item.elevation
+        ]
+          .filter(v => v !== null && v !== undefined)
+          .join(" ")
+          .toLowerCase();
+
+        if (!searchable.includes(value)) {
+          return null;
+        }
+      }
+
+      return { item, priority, index };
     })
-    .slice(0, 10);
+    .filter(Boolean)
+    .sort((a, b) =>
+      a.priority - b.priority || a.index - b.index
+    )
+    .slice(0, 10)
+    .map(result => result.item);
 }
 
 // ===============================
