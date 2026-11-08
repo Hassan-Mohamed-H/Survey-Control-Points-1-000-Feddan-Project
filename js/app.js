@@ -483,7 +483,7 @@ function getSearchResults(query) {
       else if (code.includes(value)) {
         priority = 5;
       }
-      
+
       else {
         const searchable = [
           item.description,
