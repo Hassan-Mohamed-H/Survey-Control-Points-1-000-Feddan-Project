@@ -10,8 +10,8 @@ import { getTypeColor, getStatusColor } from "./colors.js";
 // Map Constants
 // ===============================
 
-const DEFAULT_CENTER = [26.1551, 32.7160];
-const DEFAULT_ZOOM = 9;
+const DEFAULT_CENTER = [26.8206, 30.8025];
+const DEFAULT_ZOOM = 6;
 
 const FALLBACK_COLORS = [
   "#ef4444",
@@ -390,6 +390,29 @@ async function updateLatestImagery() {
     ) {
       return;
     }
+
+    console.log("========== WAYBACK DEBUG ==========");
+
+    console.log("Map Center:", {
+      latitude: center.lat,
+      longitude: center.lng
+    });
+
+    console.log("Current Zoom:", zoom);
+
+    console.log("Available Versions:");
+
+    console.table(
+      versions.map((version, index) => ({
+        index,
+        releaseDate: version.releaseDateLabel,
+        releaseDatetime: version.releaseDatetime,
+        releaseNum: version.releaseNum,
+        itemTitle: version.itemTitle
+      }))
+    );
+
+    console.log("===================================");
 
     const latestVersion = versions[0];
 
