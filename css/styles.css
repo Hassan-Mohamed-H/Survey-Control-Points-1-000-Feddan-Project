@@ -1653,7 +1653,6 @@ body.dark-mode #resetSurveyFilters:hover { background: rgba(45, 212, 191, 0.17);
   }
 }
 
-
 /* تحسينات الخطوة الثانية: لوحة البيانات وإخفاؤها بالكامل على الهاتف */
 .sidebar-reopen {
   display: none;
