@@ -605,6 +605,11 @@ function createSurveyMarker(item) {
   });
 
   marker.on("click", () => {
+  if (measureMode) {
+    addMeasurePoint(marker.getLatLng());
+    return;
+  }
+
     openSidePanel(item);
   });
 
@@ -1315,25 +1320,32 @@ export function addMeasurePoint(
   if (
     measurePoints.length >= 2
   ) {
+    // رسم الخط بين النقطة السابقة والنقطة الحالية
     const previous =
       measurePoints[
         measurePoints.length - 2
       ];
 
     L.polyline(
-      [
-        previous,
-        latlng,
-      ],
+      [previous, latlng],
       {
         weight: 3,
         dashArray: "6 6",
       }
-    ).addTo(
-      measureLayer
-    );
+    ).addTo(measureLayer);
 
-    const distance = map.distance(previous, latlng);
+    // حساب إجمالي طول المسار بالكامل
+    const distance = measurePoints.reduce(
+      (total, point, index, points) => {
+        if (index === 0) return total;
+
+        return total + map.distance(
+          points[index - 1],
+          point
+        );
+      },
+      0
+    );
 
     const distanceText = distance >= 1000
       ? `${(distance / 1000).toFixed(2)} كم`
